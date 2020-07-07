@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <conio.h>
 #include <string>
+
+HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 using namespace std;
 void _Common::gotoXY(int pX, int pY) {
 	COORD coord;
@@ -46,7 +48,19 @@ void _Common::setFontSize(int FontSize)
 	wcscpy_s(info.FaceName, L"Consolas");
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &info);
 }
-void _Common::highlight(int color1, int color2, int x, int y)
+void _Common::highlight(int x, int y)
 {
-	setTextColor(color1, color2);
+	string s = "PVP";
+	printTextAt(s, x, y);
+	SetConsoleTextAttribute(hStdout, 62);
+	Sleep(1000);
+	SetConsoleTextAttribute(hStdout, 206);
+	printTextAt(s, x, y);
+	Sleep(1000);
+	SetConsoleTextAttribute(hStdout, 90);
+	printTextAt(s, x, y);
+	Sleep(1000);
+	SetConsoleTextAttribute(hStdout, 36);
+	printTextAt(s, x, y);
+	Sleep(1000);
 }

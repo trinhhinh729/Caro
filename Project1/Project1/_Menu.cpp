@@ -111,7 +111,10 @@ void _Menu::chooseOptions()
 {
 	while (1)
 	{
-
+		while (!_kbhit())
+		{
+			_Common::highlight(75, 25);
+		}
 		switch (waitKeyBoard())
 		{
 		case 'W':

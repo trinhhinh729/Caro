@@ -10,5 +10,5 @@ public:
 	static void printTextAt(string, int, int);
 	static void setFontSize(int);
 	static void setTextColor(int, int);
-	static void highlight(int, int, int x, int y);
+	static void highlight(int x, int y);
 };
