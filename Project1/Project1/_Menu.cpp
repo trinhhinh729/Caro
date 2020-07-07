@@ -1,40 +1,9 @@
 #include "_Menu.h"
-#include "_Common.h"
-#include <Windows.h>
-#include <conio.h>
-#include "_Point.h"
-#include "_Board.h"
-#include "_Game.h"
-#include <iostream>
 using namespace std;
-void setFontSize(int FontSize)
-{
-	CONSOLE_FONT_INFOEX info = { 0 };
-	info.cbSize = sizeof(info);
-	info.dwFontSize.Y = FontSize; // leave X as zero
-	info.FontWeight = FW_NORMAL;
-	wcscpy_s(info.FaceName, L"Consolas");
-	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &info);
-}
-void resizeConsole(int width, int height)
-{
-	HWND console = GetConsoleWindow();
-	RECT r;
-	GetWindowRect(console, &r);
-	MoveWindow(console, 0, 0, width, height, TRUE);
-}
-void SetColor(int backgound_color, int text_color)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	int color_code = backgound_color * 16 + text_color;
-	SetConsoleTextAttribute(hStdout, color_code);
-}
 _Menu::_Menu()
 {
 	x = 75;
 	y = 25;
-
 }
 char _Menu::waitKeyBoard()
 {
@@ -43,9 +12,11 @@ char _Menu::waitKeyBoard()
 }
 void _Menu::printMenu()
 {
-		HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-		//SetConsoleTextAttribute(hStdout, 50);
-		setFontSize(20);
+	system("cls");
+	system("color F0");
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	//SetConsoleTextAttribute(hStdout, 50);
+	_Common::setFontSize(20);
 	cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 	cout << "			     ____________________________________________________________________________________________      " << endl;
 	cout << "			    |         ___________          ______             ___________            ___________         |     " << endl;
@@ -61,6 +32,13 @@ void _Menu::printMenu()
 	cout << "				                                                                                                       " << endl;
 	_Common::gotoXY(75,25);
 	cout << "PVP";
+	/*while (_kbhit() && waitKeyBoard() != 'S')
+	{
+		_Common::highlight(15, 0, 75, 25, "PVP");
+		Sleep(500);
+		_Common::setTextColor(15, 15);
+		Sleep(500);
+	}*/
 	_Common::gotoXY(75,27);
 	cout << "PVC";
 	_Common::gotoXY(75, 29);
@@ -70,6 +48,7 @@ void _Menu::printMenu()
 	_Common::gotoXY(75, 33);
 	cout << "About";
 	_Common::gotoXY(75, 25);
+	chooseOptions();
 }
 void _Menu::PVP()
 {
@@ -83,9 +62,8 @@ void _Menu::PVP()
 	g.startGame();
 	while (g.isContinue()) {
 		g.waitKeyBoard();
-		if (g.getCommand() == 27) g.exitGame();
-		else {
-			switch (g.getCommand()) {
+			switch (g.getCommand())
+			{
 			case 'A':
 				g.moveLeft();
 				break;
@@ -98,17 +76,23 @@ void _Menu::PVP()
 			case 'D':
 				g.moveRight();
 				break;
+			case 'L':
+				// hien len console yeu cau nhap file name
+				/*string fileName;
+				g.saveGame(fileName);*/
+				break;
+			case 27:
+				printMenu();
 			case 13:
 				//Mark the board, then check and process win/lose/draw/continue
 				if (g.processCheckBoard()) {
 					switch (g.processFinish()) {
 					case -1: case 1: case 0:
-						if (g.askContinue() != 'Y') g.exitGame();
+						if (g.askContinue()) g.exitGame();
 						else g.startGame();
 					}
 				}
 			}
-		}
 	}
 }
 void _Menu::about()
@@ -117,12 +101,17 @@ void _Menu::about()
 	cout << "19127501 Tran Phan Minh Nhut" << endl;
 	cout << "19127378 Nguyen Viet Thanh Duy" << endl;
 	cout << "19127303 Hinh Ich Trinh" << endl;
-	cout << "19127 Tran Thanh Son" << endl;
+	cout << "19127542 Tran Thanh Son" << endl;
+	while (1)
+	{
+		if (waitKeyBoard() == 27) printMenu();
+	}
 }
 void _Menu::chooseOptions()
 {
 	while (1)
 	{
+
 		switch (waitKeyBoard())
 		{
 		case 'W':
@@ -145,7 +134,7 @@ void _Menu::chooseOptions()
 				//PVC();
 				break;
 			case 29:
-				//loadGame();
+				printLoadGame();
 				break;
 			case 31:
 				//rule();
@@ -157,4 +146,47 @@ void _Menu::chooseOptions()
 
 		}
 	}
+}
+void _Menu::printLoadGame()
+{
+	system("cls");
+	_Common::printTextAt("List of saved files: ", 70, 3);
+	int cury=5;
+	for (auto i : listFileName)
+	{
+		_Common::printTextAt(i, 75, cury);
+		cury+=2;
+	}
+	cury = 5;
+	_Common::gotoXY(75, cury);
+	while (1)
+	{
+		switch (waitKeyBoard())
+		{
+		case 'W':
+			cury -= 2;
+			if (cury < 5) cury = 5;
+			_Common::gotoXY(75, cury);
+			break;
+		case 'S':
+			cury += 2;
+			if (cury > listFileName.size() * 2 + 3) cury = listFileName.size() * 2 + 3;
+			_Common::gotoXY(75, cury);
+			break;
+		case 27:
+			printMenu();
+		case 13:
+			auto it = listFileName.begin();
+			for (int i = 0; i < (cury - 5) / 2; i++) it++;
+			loadGame(*it);
+			break;
+		}
+	}
+}
+void _Menu::loadGame(string filename)
+{
+	ifstream f;
+	f.open(filename);
+	// nho viet phan than
+	f.close();
 }

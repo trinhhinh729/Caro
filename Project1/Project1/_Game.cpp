@@ -1,11 +1,4 @@
-#include <iostream>
-#include "_Common.h"
-#include <Windows.h>
-#include <conio.h>
-#include "_Point.h"
-#include "_Board.h"
 #include "_Game.h"
-
 using namespace std;
 
 _Game::_Game(int pSize, int pLeft, int pTop) 
@@ -47,9 +40,11 @@ bool _Game::processCheckBoard()
 	switch (_b->checkBoard(_x, _y, _turn))
 	{
 	case -1:
+		_Common::setTextColor(15, 4);
 		printf("X");
 		break;
 	case 1:
+		_Common::setTextColor(15, 1);
 		printf("O");
 		break;
 	case 0: return false; // Tick the cell marked
@@ -114,4 +109,11 @@ void _Game::moveUp()
 		_Common::gotoXY(_x, _y);
 
 	}
+}
+void _Game::saveGame(string filename)
+{
+	ofstream f;
+	f.open(filename);
+	// nho viet phan than
+	f.close();
 }

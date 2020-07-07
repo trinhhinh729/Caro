@@ -1,5 +1,6 @@
 #pragma once
 #include "_Point.h"
+#include "_Common.h"
 class _Board: public _Point {
 private:
 	int _size;

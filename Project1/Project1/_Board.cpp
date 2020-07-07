@@ -55,12 +55,85 @@ void _Board::resetData()
 void _Board::drawBoard()
 {
 	if (_pArr == NULL) return; // firstly call constructor
-	for (int i = 0; i <= _size; i++)
+	char a = char(179); //│
+	char b = char(196); //─
+	char c = char(218); //┌
+	char d = char(217); // ┘
+	char e = char(192); //└
+	char f = char(191); //┐
+	char g = char(193); // ┴
+	char h = char(194); //┬
+	char l = char(195); // ├
+	char m = char(197); //┼
+	char k = char(180); // ┤
+
+	int wPix = 4 * 17;
+	int hPix = 2 * 17;
+	system("color F0");
+	//_Common::setTextColor(7, 0);
+	for (int i = 0; i <= wPix; i++)
 	{
-		for (int j = 0; j <= _size; j++)
+		for (int j = 0; j <= hPix; j++)
 		{
-			_Common::gotoXY(_left + 4 * i, _top + 2 * j);
-			cout << ".";
+			_Common::gotoXY(i, j);
+			if (i == 0 and j == 0)
+			{
+				cout << c;
+			}
+			else if (i == 0 and j == hPix)
+			{
+				cout << e;
+			}
+			else if (i == wPix and j == 0)
+			{
+				cout << f;
+			}
+			else if (i == wPix and j == hPix)
+			{
+				cout << d;
+			}
+			else if (i % 4 == 0)
+			{
+				if (j == 0)
+				{
+					cout << h;
+				}
+				else if (j == hPix)
+				{
+					cout << g;
+				}
+				else if (j % 2 != 0)
+				{
+					cout << a;
+				}
+				else if (i == 0)
+				{
+					cout << l;
+				}
+				else if (i == wPix)
+				{
+					cout << k;
+				}
+				else if (j % 2 == 0)
+				{
+					cout << m;
+				}
+			}
+			else if (j % 2 == 0)
+			{
+				if (i == 0)
+				{
+					cout << l;
+				}
+				else if (i == wPix)
+				{
+					cout << k;
+				}
+				else
+				{
+					cout << b;
+				}
+			}
 		}
 	}
 	_Common::gotoXY(_pArr[0][0].getX(), _pArr[0][0].getY());//move to the 1st cell

@@ -1,7 +1,15 @@
 #pragma once
 #include "_Board.h"
+#include <Windows.h>
+#include<conio.h>
+#include <string>
+#include <fstream>
+#include <iostream>
+using namespace std;
 
-class _Game: _Board  {
+
+class _Game: public _Board
+{
 	_Board* _b;// a board game
 	bool _turn;// turn: true for the 1st player and false for the 2nd player
 	int _x, _y; // current position of cursor
@@ -22,4 +30,5 @@ public:
 	void moveLeft();
 	void moveUp();
 	void moveDown();
+	void saveGame(string);
 };

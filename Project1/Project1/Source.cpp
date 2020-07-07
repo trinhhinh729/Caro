@@ -13,5 +13,9 @@ int main()
 	_Common::resizeConsole(1920, 1080);
 	_Menu menu;
 	menu.printMenu();
-	menu.chooseOptions();
+	/*for (int i = 0; i < 255; i++)
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
+		cout << i << endl;
+	}*/
 }
